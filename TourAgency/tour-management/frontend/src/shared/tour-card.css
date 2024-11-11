@@ -76,7 +76,7 @@
 .booking__btn{
     background: var(--secondary-color) !important;
     cursor: pointer;
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 0.5rem !important;
 }
 
 .booking__btn a{
@@ -88,5 +88,3 @@
 .booking__btn a:hover{
     color: #fff;
 }
-
-/*1:00:56*/
