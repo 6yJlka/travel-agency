@@ -35,6 +35,8 @@ const quick__links2 = [
 ];
 
 const Footer = () => {
+
+  const year = new Date().getFullYear()
   return (
     <footer className="footer">
       <Container>
@@ -42,7 +44,10 @@ const Footer = () => {
           <Col lg="3">
             <div className="logo">
               <img src={logo} alt="" />
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Veritatis, repellendus.
+              </p>
 
               <div className="social__links d-flex align-items-center gap-4">
                 <span>
@@ -57,12 +62,12 @@ const Footer = () => {
                 </span>
                 <span>
                   <Link to="#">
-                    <i class="ri-instagram-fill"></i>
+                    <i class="ri-telegram-fill"></i>
                   </Link>
                 </span>
                 <span>
                   <Link to="#">
-                    <i class="ri-telegram-fill"></i>
+                    <i class="ri-instagram-fill"></i>
                   </Link>
                 </span>
               </div>
@@ -99,28 +104,31 @@ const Footer = () => {
                 <h6 className="mb-0 d-flex align-items-center gap-2">
                   <span>
                     <i class="ri-map-pin-line"></i>
-                    Address:
                   </span>
+                  Address:
                 </h6>
+
                 <p className="mb-0">Moscow, vkusnoItochka</p>
               </ListGroupItem>
               <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-3">
                 <h6 className="mb-0 d-flex align-items-center gap-2">
                   <span>
-                    <i class="ri-mail-line"></i>
-                    Email:
+                  <i class="ri-mail-line"></i>
                   </span>
+                  Email:
                 </h6>
+
                 <p className="mb-0">donskikhdg@student.bmstu.ru</p>
               </ListGroupItem>
               <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-3">
                 <h6 className="mb-0 d-flex align-items-center gap-2">
                   <span>
-                    <i class="ri-phone-line"></i>
-                    Phone:
+                  <i class="ri-phone-line"></i>
                   </span>
+                  Phone:
                 </h6>
-                <p className="mb-0">8-525-252-52-52</p>
+
+                <p className="mb-0">5-252-525-25-25</p>
               </ListGroupItem>
             </ListGroup>
           </Col>
@@ -131,4 +139,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
