@@ -20,10 +20,10 @@ const TourCard = ({ tour }) => {
         <CardBody>
           <div className="card__top d-flex align-items-centre justify-content-between">
             <span className="tour__location d-flex align-items-center gap-1">
-              <i class="ri-map-pin-line"></i> {city}
+              <i className="ri-map-pin-line"></i> {city}
             </span>
             <span className="tour__rating d-flex align-items-center gap-1">
-              <i class="ri-star-fill"></i> {avgRating === 0 ? null : avgRating}
+              <i className="ri-star-fill"></i> {avgRating === 0 ? null : avgRating}
               {totalRating === 0 ? (
                 "Not rated"
               ) : (
@@ -33,7 +33,7 @@ const TourCard = ({ tour }) => {
           </div>
 
           <h5 className="tour__title">
-            <Link to={"/tours/${id}"}>{title}</Link>
+            <Link to={`/tours/${id}`}>{title}</Link>  {/* Исправлено: используется синтаксис шаблонных строк */}
           </h5>
           <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
             <h5>
@@ -41,7 +41,7 @@ const TourCard = ({ tour }) => {
             </h5>
 
             <button className="btn booking__btn">
-              <Link to={"/tours/${id}"}>Book Now</Link>
+              <Link to={`/tours/${id}`}>Book Now</Link>  {/* Исправлено: используется синтаксис шаблонных строк */}
             </button>
           </div>
         </CardBody>
