@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.travel.tour_agency_backend.security.JwtTokenProvider;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,6 +23,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -48,6 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+
     public ResponseEntity<?> loginUser(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
@@ -55,7 +61,8 @@ public class UserController {
         Optional<User> user = userService.getUserByEmail(email);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
-            return ResponseEntity.ok("Login successful!");
+            String token = tokenProvider.generateToken(email);
+            return ResponseEntity.ok(Map.of("token", token)); // Возвращаем токен в JSON
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

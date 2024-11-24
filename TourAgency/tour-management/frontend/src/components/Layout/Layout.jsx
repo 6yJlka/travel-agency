@@ -1,17 +1,20 @@
 import React from "react"
+import { Link } from 'react-router-dom';
+import Header from '../Header/Header.jsx';
 
-import Header from './../Header/Header';
-import Routers from "../../router/Router";
-import Footer from './../Footer/Footer';
 
-const Layout = () => {
+const Layout = ({ children, isAuthenticated, onLogout }) => {
     return (
-        <>
-            <Header />
-            <Routers />
-            <Footer />
-        </>
-    )
-}
+        <div>
+            <Header isAuthenticated={isAuthenticated} onLogout={onLogout} /> {/* Передаем props */}
+            <main>
+                {children}
+            </main>
+            <footer>
+                {/* Ваш footer */}
+            </footer>
+        </div>
+    );
+};
 
 export default Layout;
