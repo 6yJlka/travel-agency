@@ -9,19 +9,22 @@ import Register from './../pages/Register'
 import SearchResultList from './../pages/SearchResultList'
 import ThankYou from "../pages/ThankYou"
 
-const Routers = () => {
+const Routers = ({ isAuthenticated, setIsAuthenticated }) => {// Принимаем prop isAuthenticated
     return (
         <Routes>
-            <Route path="/" element={<Navigate to='/home' />}/>
-            <Route path="/home" element={<Home/>}/>
-            <Route path="/tours" element={<Tours/>}/>
-            <Route path="/tours/:id" element={<TourDetails/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/thank-you" element={<ThankYou />}/>
-            <Route path="/tours/search" element={<SearchResultList/>}/>
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/tours" element={<Tours />} />
+            <Route path="/tours/:id" element={<TourDetails />} />
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace={true} /> : <Login setIsAuthenticated={setIsAuthenticated} />} /> {/* Передаем setIsAuthenticated */}
+            <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace={true}/> : <Register />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/tours/search" element={<SearchResultList />} />
+
+            {/* Защищенные маршруты */}
+            {/* <Route path="/protected-route" element={isAuthenticated ? <ProtectedRoute /> : <Navigate to="/login" />} /> */}
         </Routes>
-    )
-}
+    );
+};
 
 export default Routers;

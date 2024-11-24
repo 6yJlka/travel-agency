@@ -9,12 +9,9 @@ import { useNavigate } from "react-router-dom";
 import loginImg from "../assets/images/login.png";
 import userIcon from "../assets/images/user.png";
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => { // Принимаем функцию setIsAuthenticated
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -25,9 +22,15 @@ const Login = () => {
 
     try {
       const response = await axios.post("http://localhost:8085/api/users/login", credentials);
-      alert(response.data); // Уведомление об успешном входе
-      navigate("/"); // Перенаправление на главную страницу
+      console.log("Response data:", response.data); // Выводим данные ответа
+      localStorage.setItem("token", response.data.token);
+      setIsAuthenticated(true);
+      navigate("/");
     } catch (error) {
+      console.error("Login error:", error); // Логируем ошибку
+      if (error.response) {
+        console.error("Response data:", error.response.data); // Данные ответа ошибки (если есть)
+      }
       alert("Login failed! Please check your credentials.");
     }
   };
