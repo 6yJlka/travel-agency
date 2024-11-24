@@ -11,7 +11,7 @@ import com.travel.tour_agency_backend.security.JwtTokenProvider;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/users")
@@ -62,7 +62,13 @@ public class UserController {
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             String token = tokenProvider.generateToken(email);
-            return ResponseEntity.ok(Map.of("token", token)); // Возвращаем токен в JSON
+            User u = user.get();
+            // Создаем Map для ответа
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("username", u.getUsername());
+
+            return ResponseEntity.ok(response); // Возвращаем токен в JSON
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

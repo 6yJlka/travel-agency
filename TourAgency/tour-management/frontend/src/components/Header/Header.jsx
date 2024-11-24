@@ -20,7 +20,7 @@ const nav__links=[
         display:'Tours'
     }
 ]
-const Header = ({ isAuthenticated, onLogout }) => {
+const Header = ({ isAuthenticated, onLogout, username }) => {
 
     const headerRef = useRef(null)
 
@@ -68,9 +68,12 @@ const Header = ({ isAuthenticated, onLogout }) => {
                     <div className="nav__right d-flex align-items-center gap-4">
                         <div className="nav__btns d-flex align-items-center gap-4">
                             {isAuthenticated ? (
-                                <Button className="btn secondary__btn" onClick={onLogout}>
-                                    Выйти
-                                </Button>
+                                <>
+                                    <>{username}</>
+                                    <Button className="btn secondary__btn" onClick={onLogout}>
+                                        Выйти
+                                    </Button>
+                                </>
                             ) : (
                                 <>
                                     <Button className="btn secondary__btn">

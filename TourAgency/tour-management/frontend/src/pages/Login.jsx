@@ -24,6 +24,7 @@ const Login = ({ setIsAuthenticated }) => { // Принимаем функцию
       const response = await axios.post("http://localhost:8085/api/users/login", credentials);
       console.log("Response data:", response.data); // Выводим данные ответа
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", response.data.username);
       setIsAuthenticated(true);
       navigate("/");
     } catch (error) {
