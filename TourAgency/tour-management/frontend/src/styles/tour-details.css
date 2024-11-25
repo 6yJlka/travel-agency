@@ -51,8 +51,13 @@
     font-size: 1.1rem;
     display: flex;
     align-items: center;
-    color: var(--secondary-color);
+    color: lightgrey;
     cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.rating__group span:hover {
+    color: var(--secondary-color);
 }
 
 .tour__reviews h4{

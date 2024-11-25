@@ -5,18 +5,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import calculateAvgRating from "../utils/avgRating";
 import avatar from "../assets/images/avatar.jpg";
 import Booking from "../components/Booking/Booking";
-import Newsletter from "../shared/Newsletter"
-import axios from 'axios';
+import Newsletter from "../shared/Newsletter";
+import axios from "axios";
 
 const TourDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const reviewMsgRef = useRef("");
-  const [tourRating, setTourRating] = useState(null);
+  const [tourRating, setTourRating] = useState(null); // Хранит текущий рейтинг
+  const [hoverRating, setHoverRating] = useState(null); // Новый state для подсветки
   const [reviews, setReviews] = useState([]);
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
-  const options = { day: "numeric", month: "long", year: "numeric" }; // !!! Вынесите options за пределы условного рендеринга
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -25,7 +25,7 @@ const TourDetails = () => {
         setTour(response.data);
       } catch (error) {
         console.error("Error fetching tour details:", error);
-        navigate('/page-not-found');
+        navigate("/page-not-found");
       } finally {
         setLoading(false);
       }
@@ -34,62 +34,56 @@ const TourDetails = () => {
     fetchTour();
   }, [id, navigate]);
 
-
-
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`http://localhost:8085/api/tours/${id}/reviews`); // !!! Правильный endpoint
+        const response = await axios.get(`http://localhost:8085/api/tours/${id}/reviews`);
         setReviews(response.data);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
     };
 
-
     if (id) {
-      fetchReviews()
+      fetchReviews();
     }
-
   }, [id]);
 
-
-
-  //submit request to the server
+  // submit request to the server
   const submitHandler = async (e) => {
     e.preventDefault();
 
     const reviewText = reviewMsgRef.current.value;
-    const newReview = { // !!! Создаем объект отзыва
-      tour: { id: id }, // !!! tourId как объект
-      comment: reviewText, // !!! Используем comment (как в backend сущности)
-      rating: tourRating
+    const newReview = {
+      tour: { id: id },
+      comment: reviewText,
+      rating: tourRating,
     };
+
     try {
-      const response = await axios.post('http://localhost:8085/api/reviews', newReview, { // !!! Отправляем объект newReview
+      const response = await axios.post("http://localhost:8085/api/reviews", newReview, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
-      console.log("Review created successfully:", response.data); // !!! Выводим данные нового отзыва
+      console.log("Review created successfully:", response.data);
+      setReviews([...reviews, response.data]);
 
-      setReviews([...reviews, response.data]); // !!! Добавляем новый отзыв в state
-
-      // Очищаем поля формы
+      // Clear form
       reviewMsgRef.current.value = "";
       setTourRating(null);
     } catch (error) {
-      console.error("Error adding review:", error); // !!!  Подробное логирование ошибки
+      console.error("Error adding review:", error);
       if (error.response) {
-        console.error("Server responded with:", error.response.data); // !!! Логируем ответ сервера (если есть)
+        console.error("Server responded with:", error.response.data);
       }
     }
   };
 
-  if (!loading && tour) { // !!! Проверка на null и undefined
+  if (!loading && tour) {
     const { photoUrl, title, description, price, city, distance, maxPeople } = tour;
-    const { totalRating, avgRating } = calculateAvgRating(reviews); // !!! reviews from state
+    const { totalRating, avgRating } = calculateAvgRating(reviews);
 
     return (
         <>
@@ -102,28 +96,25 @@ const TourDetails = () => {
                     <div className="tour__info">
                       <h2>{title}</h2>
                       <div className="d-flex align-items-center gap-5">
-                        <span className="tour__rating d-flex align-items-center gap-1">
-                                                <i className="ri-star-fill" style={{ color: "var(--secondary-color)" }}></i>{" "}
-                          {avgRating === 0 ? null : avgRating}
-                          {totalRating === 0 ? ("Not rated") : (<span></span>)}
-                        </span>
+                      <span className="tour__rating d-flex align-items-center gap-1">
+                        <i className="ri-star-fill" style={{ color: "var(--secondary-color)" }}></i>{" "}
+                        {avgRating === 0 ? null : avgRating}
+                        {totalRating === 0 ? "Not rated" : <span></span>}
+                      </span>
                         <span>
-                          <i className="ri-map-pin-user-fill"></i> {city}
-                        </span>
+                        <i className="ri-map-pin-user-fill"></i> {city}
+                      </span>
                       </div>
-
                       <div className="tour__extra-details">
-                        {/* ... (other spans) */}
+                      <span>
+                        <i className="ri-money-dollar-circle-fill"></i> ${price} /per person/
+                      </span>
                         <span>
-                          <i className="ri-money-dollar-circle-fill"></i> ${price} /per person/
-                        </span>
-                        {/* ... (other spans) */}
+                        <i className="ri-pin-distance-fill"></i> {distance} /in km/
+                      </span>
                         <span>
-                          <i class="ri-pin-distance-fill"></i> {distance} /in km/
-                        </span>
-                        <span>
-                          <i class="ri-group-fill"></i> {maxPeople}
-                        </span>
+                        <i className="ri-group-fill"></i> {maxPeople}
+                      </span>
                       </div>
                       <h5>Description</h5>
                       <p>{description}</p>
@@ -134,28 +125,27 @@ const TourDetails = () => {
 
                       <Form onSubmit={submitHandler}>
                         <div className="d-flex align-items-center gap-3 mb-4 rating__group">
-                      <span onClick={() => setTourRating(1)}>
-                        1 <i className="ri-star-fill"></i>
-                      </span>
-                          <span onClick={() => setTourRating(2)}>
-                        2 <i className="ri-star-fill"></i>
-                      </span>
-                          <span onClick={() => setTourRating(3)}>
-                        3 <i className="ri-star-fill"></i>
-                      </span>
-                          <span onClick={() => setTourRating(4)}>
-                        4 <i className="ri-star-fill"></i>
-                      </span>
-                          <span onClick={() => setTourRating(5)}>
-                        5 <i className="ri-star-fill"></i>
-                      </span>
+                          {[1, 2, 3, 4, 5].map((rating) => (
+                              <span
+                                  key={rating}
+                                  onClick={() => setTourRating(rating)}
+                                  onMouseEnter={() => setHoverRating(rating)} // Изменение состояния при наведении
+                                  onMouseLeave={() => setHoverRating(null)} // Убираем подсветку
+                                  style={{
+                                    color:
+                                        rating <= (hoverRating || tourRating)
+                                            ? "var(--secondary-color)" // Золотой цвет для активной или подсвеченной звезды
+                                            : "lightgray", // Бледный цвет для остальных
+                                    cursor: "pointer",
+                                  }}
+                              >
+                            {rating} <i className="ri-star-fill"></i>
+                          </span>
+                          ))}
                         </div>
                         <div className="review__input">
                           <input type="text" ref={reviewMsgRef} placeholder="Write your comment here" required />
-                          <button
-                              className="btn primary__btn text-white"
-                              type="submit"
-                          >
+                          <button className="btn primary__btn text-white" type="submit">
                             Submit
                           </button>
                         </div>
@@ -168,45 +158,41 @@ const TourDetails = () => {
                               <div className="w-100">
                                 <div className="d-flex align-items-center justify-content-between">
                                   <div>
-
+                                    <h6 className="review__username">{review.user?.username}</h6>
                                     <p>
-                                      {new Date(review.createdAt).toLocaleDateString(
-                                          "en-US",
-                                          { day: "numeric", month: "long", year: "numeric" }
-                                      )}
+                                      {new Date(review.createdAt).toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                      })}
                                     </p>
                                     <h6>{review.comment}</h6>
                                   </div>
                                   <span className="d-flex align-items-center">
-                                   {review.rating}
+                                {review.rating}
                                     <i className="ri-star-fill"></i>
-                                   </span>
-
+                              </span>
                                 </div>
                               </div>
                             </div>
                         ))}
                       </ListGroup>
-
                     </div>
-
                   </div>
                 </Col>
 
                 <Col lg="4">
                   <Booking tour={tour} avgRating={avgRating} />
                 </Col>
-
               </Row>
             </Container>
           </section>
           <Newsletter />
         </>
     );
-
   }
 
-  return <div>Loading...</div>; // !!!  Отображаем loading... пока данные загружаются
+  return <div>Loading...</div>;
 };
 
 export default TourDetails;
