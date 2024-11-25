@@ -2,8 +2,15 @@ import React from "react";
 import "./newsletter.css";
 import { Container, Row, Col } from "reactstrap";
 import maleTourist from "../assets/images/male-tourist.png";
+import { useNavigate } from "react-router-dom";
 
 const Newsletter = () => {
+  const navigate = useNavigate()
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    navigate("/thank-you-sub");
+  };
   return (
     <section className="newsletter">
       <Container>
@@ -14,7 +21,7 @@ const Newsletter = () => {
 
               <div className="newsletter__input">
                 <input type="email" placeholder="enter email" />
-                <button className="btn newsletter__btn">Subscribe</button>
+                <button className="btn newsletter__btn" onClick={handleClick}>Subscribe</button>
               </div>
 
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam consequuntur earum iste pariatur reprehenderit a?</p>

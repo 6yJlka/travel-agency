@@ -9,6 +9,7 @@ import Register from './../pages/Register'
 import SearchResultList from './../pages/SearchResultList'
 import ThankYou from "../pages/ThankYou"
 import AddTour from './../pages/AddTour'
+import ThankYouSub from "../pages/ThankYouSub";
 
 const Routers = ({ isAuthenticated, setIsAuthenticated }) => {// Принимаем prop isAuthenticated
     return (
@@ -20,6 +21,7 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {// Принима�
             <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace={true} /> : <Login setIsAuthenticated={setIsAuthenticated} />} /> {/* Передаем setIsAuthenticated */}
             <Route path="/register" element={isAuthenticated ? <Navigate to="/home" replace={true}/> : <Register />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/thank-you-sub" element={<ThankYouSub />} />
             <Route path="/tours/search" element={<SearchResultList />} />
             <Route path="/add-tour" element={<AddTour />} />
             {/* Защищенные маршруты */}
