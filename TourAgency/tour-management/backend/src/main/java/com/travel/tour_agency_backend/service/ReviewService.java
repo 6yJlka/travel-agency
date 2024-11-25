@@ -1,7 +1,11 @@
 package com.travel.tour_agency_backend.service;
 
 import com.travel.tour_agency_backend.entity.Review;
+import com.travel.tour_agency_backend.entity.Tour;
+import com.travel.tour_agency_backend.entity.User;
 import com.travel.tour_agency_backend.repository.ReviewRepository;
+import com.travel.tour_agency_backend.repository.TourRepository;
+import com.travel.tour_agency_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +16,20 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-
+    private final TourRepository tourRepository; // !!!
+    private final UserRepository userRepository; // !!!
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, TourRepository tourRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
+        this.tourRepository = tourRepository; // !!!
+        this.userRepository = userRepository; // !!!
+
     }
 
+
     // Получение всех отзывов
-    public List<Review> getAllReviews() {
-        return reviewRepository.findAll();
+    public List<Review> getReviewsByTourId(Long tourId){
+        return reviewRepository.findByTourId(tourId);
     }
 
     // Получение отзыва по id
@@ -29,7 +38,17 @@ public class ReviewService {
     }
 
     // Создание нового отзыва
-    public Review createReview(Review review) {
+    public Review createReview(Review review, Long userId, Long tourId) { // !!! userId and tourId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId)); // !!! Обработка ошибки, если пользователь не найден
+
+        Tour tour = tourRepository.findById(tourId)
+                .orElseThrow(() -> new IllegalArgumentException("Tour not found with id: " + tourId)); // !!! Обработка ошибки, если тур не найден
+
+
+        review.setUser(user);  // !!! Связываем отзыв с пользователем
+        review.setTour(tour);  // !!! Связываем отзыв с туром
+
         return reviewRepository.save(review);
     }
 
