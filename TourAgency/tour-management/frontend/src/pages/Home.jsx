@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import "../styles/home.css";
 import { Container, Row, Col } from "reactstrap";
 import heroImg from "../assets/images/hero-img01.jpg";
@@ -10,12 +10,38 @@ import Subtitle from "./../shared/Subtitle";
 
 import SearchBar from "../shared/SearchBar";
 import ServiceList from "../services/ServiceList";
-import FeaturedTourList from "../components/Featured-tours/FeaturedTourList";
+
 import MasonryImagesGallery from "../components/image-gallery/MasonryImagesGallery";
 import Testimonial from "../components/Testimonial/Testimonial";
 import Newsletter from "../shared/Newsletter";
+import TourCard from "./../shared/TourCard";
+import axios from 'axios'; // !!! Импортируйте axios
 
 const Home = () => {
+  const [tours, setTours] = useState([]); // !!! State для хранения туров из БД
+  const [featuredTours, setFeaturedTours] = useState([]) // !!!
+  const [loading, setLoading] = useState(true); // !!!  State для индикации загрузки
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        const response = await axios.get('http://localhost:8085/api/tours'); // !!! Запрос на backend
+        setTours(response.data);
+        const featured = response.data.filter(tour => tour.featured === true); // !!! Фильтрация featured туров
+        setFeaturedTours(featured);
+
+
+      } catch (error) {
+        console.error("Error fetching tours:", error);
+      }finally {
+
+        setLoading(false);
+
+      }
+    };
+    fetchTours();
+  }, []);
+
   return (
     <>
       {/*================= hero section start =============*/}
@@ -73,6 +99,8 @@ const Home = () => {
           </Row>
         </Container>
       </section>
+
+
       {/*============= featured tour section start ===============*/}
       <section>
         <Container>
@@ -81,11 +109,24 @@ const Home = () => {
               <Subtitle subtitle={"Explore"} />
               <h2 className="featured__tour-title">Our featured tours</h2>
             </Col>
-            <FeaturedTourList />
+
+            {/* !!! Условный рендеринг */}
+            {loading ? ( // !!!  Если loading === true, отображаем индикатор загрузки
+                <div>Loading tours...</div> // !!!  Индикатор загрузки
+            ) : (
+                featuredTours.map((tour) => ( // !!!  Используем tours из state
+                    <Col lg="3" className="mb-4" key={tour.id}>
+                      <TourCard tour={tour} />
+                    </Col>
+                ))
+            )}
+
+
           </Row>
         </Container>
       </section>
       {/*============= featured tour section end ===============*/}
+
       {/*=================experience section start======================*/}
       <section>
         <Container>

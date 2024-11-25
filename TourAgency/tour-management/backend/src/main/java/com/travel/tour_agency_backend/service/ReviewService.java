@@ -8,6 +8,7 @@ import com.travel.tour_agency_backend.repository.TourRepository;
 import com.travel.tour_agency_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,8 @@ public class ReviewService {
 
 
     // Получение всех отзывов
-    public List<Review> getReviewsByTourId(Long tourId){
+    @Transactional(readOnly = true) // !!!  readOnly = true для методов чтения
+    public List<Review> getReviewsByTourId(Long tourId) {
         return reviewRepository.findByTourId(tourId);
     }
 
