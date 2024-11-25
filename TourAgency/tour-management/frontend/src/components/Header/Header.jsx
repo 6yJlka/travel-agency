@@ -47,7 +47,9 @@ const Header = ({ isAuthenticated, onLogout, username, isAdmin }) => {
                 justify-content-between">
                     {/* ============= logo =========== */}
                     <div className="logo">
-                        <img src={logo} alt="" />
+                        <Link to="/">
+                            <img src={logo} alt="" />
+                        </Link>
                     </div>
                     {/* ============= logo end=========== */}
 
