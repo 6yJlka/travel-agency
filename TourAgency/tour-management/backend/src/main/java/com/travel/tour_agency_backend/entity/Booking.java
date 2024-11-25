@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings") // Указываем имя таблицы
+@Table(name = "bookings")
 @Data
 public class Booking {
 
@@ -24,8 +24,7 @@ public class Booking {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-
-    @JsonFormat(pattern = "yyyy-MM-dd") // Отображение только даты без времени
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "booking_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime bookingDate;
 
@@ -35,10 +34,19 @@ public class Booking {
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
+
+    @Column(nullable = false)
+    private String phone;
+
+    //вот тут какая-то хуйня, нужно как-то фиксить,из-за этого оно не хочет добавляться в бд
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "book_at", nullable = false)
+    private LocalDateTime bookAt;
+
     @PrePersist
     public void prePersist() {
-        // Устанавливаем текущую дату и время перед сохранением объекта
         this.bookingDate = LocalDateTime.now();
     }
-
 }
