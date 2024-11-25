@@ -4,7 +4,7 @@ import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 const Booking = ({ tour, avgRating }) => {
-  const { price, reviews } = tour;
+  const { price, reviews, maxPeople } = tour;
 
   const navigate = useNavigate()
 
@@ -19,6 +19,19 @@ const Booking = ({ tour, avgRating }) => {
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+  const handleChange2 = (e) => {
+    const { value } = e.target;
+    const numValue = Number(value);
+
+    if (numValue < 1) {
+      e.target.value = 1; // Если меньше 1, устанавливаем 1
+    } else if (numValue > maxPeople) {
+      e.target.value = maxPeople; // Если больше 10, устанавливаем 10
+    } else {
+      // Обновляем состояние, если значение в допустимом диапазоне
+      setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    }
   };
 
 
@@ -56,7 +69,7 @@ const Booking = ({ tour, avgRating }) => {
           </FormGroup>
           <FormGroup>
             <input
-              type="number"
+              type="text"
               placeholder="Phone"
               id="phone"
               required
@@ -76,7 +89,7 @@ const Booking = ({ tour, avgRating }) => {
               placeholder="Guests"
               id="guestSize"
               required
-              onChange={handleChange}
+              onChange={handleChange2}
             />
           </FormGroup>
         </Form>
