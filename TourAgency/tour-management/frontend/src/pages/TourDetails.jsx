@@ -88,7 +88,7 @@ const TourDetails = () => {
   };
 
   if (!loading && tour) { // !!! Проверка на null и undefined
-    const { photoUrl, title, description, price, city, distance, maxGroupSize } = tour;
+    const { photoUrl, title, description, price, city, distance, maxPeople } = tour;
     const { totalRating, avgRating } = calculateAvgRating(reviews); // !!! reviews from state
 
     return (
@@ -105,7 +105,7 @@ const TourDetails = () => {
                         <span className="tour__rating d-flex align-items-center gap-1">
                                                 <i className="ri-star-fill" style={{ color: "var(--secondary-color)" }}></i>{" "}
                           {avgRating === 0 ? null : avgRating}
-                          {totalRating === 0 ? ("Not rated") : (<span>({reviews?.length})</span>)}
+                          {totalRating === 0 ? ("Not rated") : (<span></span>)}
                         </span>
                         <span>
                           <i className="ri-map-pin-user-fill"></i> {city}
@@ -118,6 +118,12 @@ const TourDetails = () => {
                           <i className="ri-money-dollar-circle-fill"></i> ${price} /per person/
                         </span>
                         {/* ... (other spans) */}
+                        <span>
+                          <i class="ri-pin-distance-fill"></i> {distance} /in km/
+                        </span>
+                        <span>
+                          <i class="ri-group-fill"></i> {maxPeople}
+                        </span>
                       </div>
                       <h5>Description</h5>
                       <p>{description}</p>

@@ -45,10 +45,15 @@ public class Tour {
     @JsonIgnore // !!!  Добавляем @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
+    @Column(name = "max_people", nullable = false)
+    private Integer maxPeople;
+
+    @Column(nullable = false)
+    private Integer distance;
+
     @PrePersist
     public void prePersist() {
         // Устанавливаем текущую дату и время перед сохранением объекта
         this.createdAt = LocalDateTime.now();
     }
-
 }

@@ -72,6 +72,14 @@ const AddTour = () => {
                             <Label for="photoUrl">Photo URL</Label>
                             <Input type="text" name="photoUrl" id="photoUrl" onChange={handleChange} required />
                         </FormGroup>
+                        <FormGroup>
+                            <Label for="maxPeople">Max people</Label>
+                            <Input type="text" name="maxPeople" id="maxPeople" onChange={handleChange} required />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="distance">Distance</Label>
+                            <Input type="text" name="distance" id="distance" onChange={handleChange} required />
+                        </FormGroup>
                         <FormGroup check>
                             <Input type="checkbox" name="featured" id="featured" onChange={handleFeaturedChange} />
                             <Label check for="featured">
