@@ -20,25 +20,25 @@ const nav__links=[
         display:'Tours'
     }
 ]
-const Header = ({ isAuthenticated, onLogout, username }) => {
+const Header = ({ isAuthenticated, onLogout, username, isAdmin }) => {
 
     const headerRef = useRef(null)
 
-    const stickyHeaderFunc = () => {
-        window.addEventListener('scroll', () => {
-            if(document.body.scrollTop >80 || document.documentElement.scrollTop >80){
-                headerRef.current.classList.add('sticky__header')
-            } else {
-                headerRef.current.classList.remove('sticky__header')
-            }
-        })
-    }
-
     useEffect(() => {
-        stickyHeaderFunc()
+        const handleScroll = () => {
+            if (headerRef.current) {
+                if (window.pageYOffset > 80) {
+                    headerRef.current.classList.add('sticky__header')
+                } else {
+                    headerRef.current.classList.remove('sticky__header')
+                }
+            }
+        }
 
-        return window.removeEventListener('scroll', stickyHeaderFunc)
-    })
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll); // !!! Очистка
+    }, []); // !!! Пустой массив зависимостей
 
     return <header className="header" ref={headerRef}>
         <Container>
@@ -69,9 +69,16 @@ const Header = ({ isAuthenticated, onLogout, username }) => {
                         <div className="nav__btns d-flex align-items-center gap-4">
                             {isAuthenticated ? (
                                 <>
+                                    {isAdmin && ( // !!!  Если isAdmin === true
+                                        <Button className="btn secondary__btn">
+                                            <Link to="/add-tour">Add Tour</Link>
+
+                                        </Button>
+                                    )}
+
                                     <>{username}</>
                                     <Button className="btn secondary__btn" onClick={onLogout}>
-                                        Выйти
+                                        Logout
                                     </Button>
                                 </>
                             ) : (

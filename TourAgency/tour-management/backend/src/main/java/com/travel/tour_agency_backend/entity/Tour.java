@@ -1,6 +1,7 @@
 package com.travel.tour_agency_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -41,6 +42,7 @@ public class Tour {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // !!!  Добавляем @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
     @PrePersist
