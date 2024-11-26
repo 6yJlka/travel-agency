@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TourService {
 
@@ -22,6 +24,16 @@ public class TourService {
     public List<Tour> getAllTours() {
         return tourRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public List<Tour> searchTours(String city, Integer distance, Integer maxGroupSize) { // !!!  Метод для поиска
+        return tourRepository.findAll().stream()
+                .filter(tour -> city == null || tour.getCity().contains(city))
+                .filter(tour -> distance == null || tour.getDistance() >= distance)
+                .filter(tour -> maxGroupSize == null || tour.getMaxPeople() >= maxGroupSize)
+                .collect(Collectors.toList()); // !!! Collectors.toList()
+    }
+
 
     // Получение тура по id
     public Optional<Tour> getTourById(Long id) {

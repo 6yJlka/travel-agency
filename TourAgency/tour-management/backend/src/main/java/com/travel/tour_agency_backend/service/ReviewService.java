@@ -27,7 +27,6 @@ public class ReviewService {
 
     }
 
-
     // Получение всех отзывов
     @Transactional(readOnly = true) // !!!  readOnly = true для методов чтения
     public List<Review> getReviewsByTourId(Long tourId) {
