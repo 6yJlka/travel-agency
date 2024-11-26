@@ -6,6 +6,7 @@ import SearchBar from "./../shared/SearchBar";
 import { Col, Container, Row } from "reactstrap";
 import Newsletter from "./../shared/Newsletter";
 import axios from "axios";
+import Footer from "../components/Footer/Footer";
 
 const Tours = () => {
     const [pageCount, setPageCount] = useState(0);
@@ -76,6 +77,7 @@ const Tours = () => {
                 </Container>
             </section>
             <Newsletter />
+            <Footer />
         </>
     );
 };

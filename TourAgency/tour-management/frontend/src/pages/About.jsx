@@ -7,6 +7,7 @@ import WheChooseUs from "./../assets/images/why-choose-us.png";
 import OurValues from "./../assets/images/our-values.png";
 import StartToday from "./../assets/images/start-today.png";
 import Newsletter from "../shared/Newsletter";
+import Footer from "../components/Footer/Footer";
 
 const sections = [
     {
@@ -97,6 +98,7 @@ const About = () => {
                 </div>
             </section>
             <Newsletter />
+            <Footer/>
         </>
     );
 };
