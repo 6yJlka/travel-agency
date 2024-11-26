@@ -2,47 +2,73 @@ import React, { useState } from "react";
 import "./booking.css";
 import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Booking = ({ tour, avgRating }) => {
-  const { price, reviews, maxPeople } = tour;
-
+  const { price, maxPeople } = tour;
   const navigate = useNavigate()
 
-  const [credentials, setCredentials] = useState({
-    userId: "01",
-    userEmail: "example@mail.ru",
-    fullName: "",
-    phone: "",
-    guestSize: 1,
-    bookAt: "",
+  const [bookingData, setBookingData] = useState({
+    tour: { id: tour.id }, // !!!  Добавьте tourId
+    user: {id : 1},
+    fullName: '',
+    phone: '',
+    bookAt: '',
+    numPeople: 1,
+    totalPrice: price,
   });
 
   const handleChange = (e) => {
-    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setBookingData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-  const handleChange2 = (e) => {
-    const { value } = e.target;
-    const numValue = Number(value);
 
-    if (numValue < 1) {
-      e.target.value = 1; // Если меньше 1, устанавливаем 1
-    } else if (numValue > maxPeople) {
-      e.target.value = maxPeople; // Если больше 10, устанавливаем 10
-    } else {
-      // Обновляем состояние, если значение в допустимом диапазоне
-      setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-    }
+  const handleChange2 = (e) => {
+    let numValue = parseInt(e.target.value, 10) || 1; // default to 1 if not an integer
+    numValue = Math.max(1, numValue);
+    numValue = Math.min(maxPeople, numValue);
+    setBookingData(prev => ({ ...prev, numPeople: numValue, totalPrice: tour.price * numValue }));
+    e.target.value = numValue;// !!!  Обновляем значение в поле ввода
   };
 
 
   const serviceFee = 10
-  const totalAmount = Number(price) * Number(credentials.guestSize) + Number(serviceFee)
-  //send data to server
-  const handleClick = (e) => {
-    e.preventDefault();
+  const totalAmount = bookingData.totalPrice + serviceFee;
 
-    navigate("/thank-you");
+  //send data to server
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+
+      const response = await axios.post('http://localhost:8085/api/bookings', bookingData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+
+      });
+      // Сбрасываем данные формы после успешного бронирования
+      setBookingData({
+        tour: { id: tour.id },
+        user: {id : 1},
+        fullName: "",
+        phone: "",
+        bookAt: "",
+        numPeople: 1,
+        totalPrice: price
+      });
+
+      navigate("/thank-you");
+
+    } catch (error) {
+      console.error("Error adding booking:", error);
+      if (error.response) {
+        console.error("Server responded with:", error.response.data);
+      }
+    }
   };
+
+
+
   return (
     <div className="booking">
       <div className="booking__top d-flex align-items-center justify-content-between">
@@ -57,6 +83,7 @@ const Booking = ({ tour, avgRating }) => {
       {/*================= booking form start ===================== */}
       <div className="booking__form">
         <h5>Information</h5>
+
         <Form className="booking_info-form" onSubmit={handleClick}>
           <FormGroup>
             <input
@@ -67,6 +94,7 @@ const Booking = ({ tour, avgRating }) => {
               onChange={handleChange}
             />
           </FormGroup>
+
           <FormGroup>
             <input
               type="text"
@@ -76,6 +104,7 @@ const Booking = ({ tour, avgRating }) => {
               onChange={handleChange}
             />
           </FormGroup>
+
           <FormGroup className="d-flex align-items-center gap-3">
             <input
               type="date"
@@ -84,39 +113,42 @@ const Booking = ({ tour, avgRating }) => {
               required
               onChange={handleChange}
             />
+
             <input
               type="number"
               placeholder="Guests"
-              id="guestSize"
+              id="numPeople"
               required
               onChange={handleChange2}
             />
           </FormGroup>
+          <ListGroup>
+            <ListGroupItem className="border-0 px-0">
+              <h5 className="d-flex align-items-center gap-1">
+                ${price} <i className="ri-close-line"></i> 1 person
+              </h5>
+              <span>${price}</span>
+            </ListGroupItem>
+            <ListGroupItem className="border-0 px-0">
+              <h5>Service charge</h5>
+              <span>${serviceFee}</span>
+            </ListGroupItem>
+            <ListGroupItem className="border-0 px-0 total">
+              <h5>Total</h5>
+              <span>${totalAmount}</span>
+            </ListGroupItem>
+          </ListGroup>
+
+          <Button className="btn primary__btn w-100 mt-4" type="submit">
+            Book Now
+          </Button>
         </Form>
+
       </div>
       {/*================= booking form end ===================== */}
       {/*================= booking bottom start ===================== */}
       <div className="booking__bottom">
-        <ListGroup>
-          <ListGroupItem className="border-0 px-0">
-            <h5 className="d-flex align-items-center gap-1">
-              ${price} <i className="ri-close-line"></i> 1 person
-            </h5>
-            <span>${price}</span>
-          </ListGroupItem>
-          <ListGroupItem className="border-0 px-0">
-            <h5>Service charge</h5>
-            <span>${serviceFee}</span>
-          </ListGroupItem>
-          <ListGroupItem className="border-0 px-0 total">
-            <h5>Total</h5>
-            <span>${totalAmount}</span>
-          </ListGroupItem>
-        </ListGroup>
 
-        <Button className="btn primary__btn w-100 mt-4" onClick={handleClick}>
-          Book Now
-        </Button>
       </div>
       {/*================= booking bottom end ===================== */}
     </div>
