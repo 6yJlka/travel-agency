@@ -11,7 +11,7 @@ import ThankYou from "../pages/ThankYou"
 import AddTour from './../pages/AddTour'
 import ThankYouSub from "../pages/ThankYouSub";
 import About from "../pages/About";
-
+import Bookings from "../pages/Bookings";
 const Routers = ({ isAuthenticated, setIsAuthenticated }) => {// Принимаем prop isAuthenticated
     return (
         <Routes>
@@ -26,6 +26,7 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {// Принима�
             <Route path="/tours/search" element={<SearchResultList />} />
             <Route path="/add-tour" element={<AddTour />} />
             <Route path="/about" element={<About />} />
+            <Route path="/show-books" element={<Bookings />} />
             {/* Защищенные маршруты */}
             {/* <Route path="/protected-route" element={isAuthenticated ? <ProtectedRoute /> : <Navigate to="/login" />} /> */}
         </Routes>

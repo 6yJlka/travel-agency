@@ -72,10 +72,14 @@ const Header = ({ isAuthenticated, onLogout, username, isAdmin }) => {
                             {isAuthenticated ? (
                                 <>
                                     {isAdmin && ( // !!!  Если isAdmin === true
+                                        <>
                                         <Button className="btn secondary__btn">
                                             <Link to="/add-tour">Add Tour</Link>
-
                                         </Button>
+                                            <Button className="btn secondary__btn">
+                                                <Link to="/show-books">Show All Bookings</Link>
+                                            </Button>
+                                        </>
                                     )}
 
                                     <>{username}</>
