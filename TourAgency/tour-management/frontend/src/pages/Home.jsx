@@ -15,7 +15,8 @@ import MasonryImagesGallery from "../components/image-gallery/MasonryImagesGalle
 import Testimonial from "../components/Testimonial/Testimonial";
 import Newsletter from "../shared/Newsletter";
 import TourCard from "./../shared/TourCard";
-import axios from 'axios'; // !!! Импортируйте axios
+import axios from 'axios';
+import Footer from "../components/Footer/Footer"; // !!! Импортируйте axios
 
 const Home = () => {
   const [tours, setTours] = useState([]); // !!! State для хранения туров из БД
@@ -206,6 +207,7 @@ const Home = () => {
       </section>
       {/*================= testimonial section end =================== */}
       <Newsletter/>
+      <Footer/>
     </>
   );
 };
