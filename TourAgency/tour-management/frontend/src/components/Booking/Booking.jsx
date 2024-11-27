@@ -9,8 +9,7 @@ const Booking = ({ tour, avgRating }) => {
   const navigate = useNavigate()
 
   const [bookingData, setBookingData] = useState({
-    tour: { id: tour.id }, // !!!  Добавьте tourId
-    user: {id : 1},
+    tour: { id: tour.id },
     fullName: '',
     phone: '',
     bookAt: '',
@@ -49,7 +48,6 @@ const Booking = ({ tour, avgRating }) => {
       // Сбрасываем данные формы после успешного бронирования
       setBookingData({
         tour: { id: tour.id },
-        user: {id : 1},
         fullName: "",
         phone: "",
         bookAt: "",

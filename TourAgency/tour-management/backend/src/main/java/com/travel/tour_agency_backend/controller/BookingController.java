@@ -58,6 +58,7 @@ public class BookingController {
         System.out.println("Received booking data: " + booking);
         try {
             String token = authHeader.substring(7);
+
             if (tokenProvider.validateToken(token)) {
                 Long userId = tokenProvider.getUserIdFromJWT(token);
                 User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
@@ -66,15 +67,10 @@ public class BookingController {
 
                 // !!! Получаем объект Tour по id и устанавливаем его в booking
                 Long tourId = booking.getTour().getId();
-
                 Tour tour = tourRepository.findById(tourId)
                         .orElseThrow(() -> new IllegalArgumentException("Tour not found with ID: " + tourId));
-
                 booking.setTour(tour);
-
                 booking.setTotalPrice(tour.getPrice().multiply(BigDecimal.valueOf(booking.getNumPeople())));
-
-
                 Booking savedBooking = bookingService.createBooking(booking);
                 return ResponseEntity.ok(savedBooking);
             } else {
