@@ -1,22 +1,21 @@
 import React, {useRef} from "react";
 import './search-bar.css'
 import {Col, Form, FormGroup} from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
-    const locationRef = useRef('')
-    const distanceRef = useRef(0)
-    const maxGroupSizeRef = useRef(0)
+    const navigate = useNavigate(); // !!!  Инициализация useNavigate
+    const locationRef = useRef('');
+    const distanceRef = useRef(0);
+    const maxGroupSizeRef = useRef(0);
 
 
     const searchHandler = () => {
-        const location = locationRef.current.value
-        const distance = distanceRef.current.value
-        const maxGroupSize = maxGroupSizeRef.current.value
-
-        if(location === '' || distance === '' || maxGroupSize === ''){
-            return alert("All fields are required!");
-        }
-    }
+        const location = locationRef.current.value;
+        const distance = distanceRef.current.value;
+        const maxGroupSize = maxGroupSizeRef.current.value;
+        navigate(`/tours/search?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`); // !!!  Перенаправление с параметрами запроса
+    };
 
 
     return <Col lg='12'>

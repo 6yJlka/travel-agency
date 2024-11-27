@@ -33,6 +33,20 @@ public class TourController {
         return tourService.getAllTours();
     }
 
+    @GetMapping("/search") // !!!  Отдельный endpoint для поиска
+    public ResponseEntity<List<Tour>> searchTours(
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) Integer distance,
+            @RequestParam(required = false) Integer maxGroupSize
+    ) {
+        try {
+            List<Tour> tours = tourService.searchTours(city, distance, maxGroupSize);
+            return new ResponseEntity<>(tours, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public Optional<Tour> getTourById(@PathVariable Long id) {
         return tourService.getTourById(id);

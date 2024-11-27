@@ -41,9 +41,8 @@ public class Booking {
     private String phone;
 
     //вот тут какая-то хуйня, нужно как-то фиксить,из-за этого оно не хочет добавляться в бд
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "book_at", nullable = false)
-    private LocalDateTime bookAt;
+    private String bookAt;
 
     @PrePersist
     public void prePersist() {

@@ -30,6 +30,7 @@ public class BookingService {
 
     // Создание нового бронирования
     public Booking createBooking(Booking booking) {
+        System.out.println("Saving booking: " + booking);
         return bookingRepository.save(booking);
     }
 
