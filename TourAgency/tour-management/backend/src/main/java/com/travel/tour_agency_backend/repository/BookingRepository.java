@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     // Дополнительные методы можно добавить здесь
+    void deleteByTourId(Long tourId);
 }

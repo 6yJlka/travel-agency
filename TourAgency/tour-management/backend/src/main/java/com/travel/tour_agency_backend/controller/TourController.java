@@ -81,8 +81,28 @@ public class TourController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTour(@PathVariable Long id) {
-        tourService.deleteTour(id);
+    public ResponseEntity<?> deleteTour(@RequestHeader("Authorization") String authHeader, @PathVariable Long id) {
+        try {
+            String token = authHeader.substring(7);
+            if (tokenProvider.validateToken(token)) {
+                String username = tokenProvider.getUsernameFromJWT(token);
+                if ("admin".equals(username)) { // !!!  Только admin может удалять туры
+                    tourService.deleteTour(id); // !!!  Вызов метода сервиса для удаления
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT); // !!!  204 No Content
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN); // !!! 403 Forbidden
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // !!!  401 Unauthorized
+            }
+
+        }catch (Exception exception) {
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+
+
     }
 
 

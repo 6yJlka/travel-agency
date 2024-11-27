@@ -1,6 +1,7 @@
 package com.travel.tour_agency_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class Booking {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "tour_id", referencedColumnName = "id", nullable = false)
+
     private Tour tour;
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -40,7 +42,6 @@ public class Booking {
     @Column(nullable = false)
     private String phone;
 
-    //вот тут какая-то хуйня, нужно как-то фиксить,из-за этого оно не хочет добавляться в бд
     @Column(name = "book_at", nullable = false)
     private String bookAt;
 
