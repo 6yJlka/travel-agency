@@ -67,6 +67,7 @@ public class UserController {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("username", u.getUsername());
+            response.put("isAdmin", "admin".equals(user.get().getUsername()));
 
             return ResponseEntity.ok(response); // Возвращаем токен в JSON
         } else {

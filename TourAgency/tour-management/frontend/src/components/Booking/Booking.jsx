@@ -37,6 +37,7 @@ const Booking = ({ tour, avgRating }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    console.log (bookingData)
     try {
 
       const response = await axios.post('http://localhost:8085/api/bookings', bookingData, {

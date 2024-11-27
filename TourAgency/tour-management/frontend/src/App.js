@@ -7,6 +7,7 @@ import Routers from "./router/Router.js"; // Импорт Routers
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,15 +19,10 @@ function App() {
       if (storedUsername) {
           setUsername(storedUsername);
       }
-  }, [username]);
+      const storedIsAdmin = localStorage.getItem("isAdmin");
+      setIsAdmin(storedIsAdmin === 'true'); // !!! устанавливаем isAdmin из localStorage
 
-    const [isAdmin, setIsAdmin] = useState(false); // !!!  State для проверки роли admin
-
-    useEffect(() => {
-        const isAdminFlag = localStorage.getItem('isAdmin');
-        setIsAdmin(isAdminFlag === 'true');
-    }, []);
-
+  }, [username, isAdmin]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");

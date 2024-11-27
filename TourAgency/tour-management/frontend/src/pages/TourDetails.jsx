@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../styles/tour-details.css";
-import { Container, Row, Col, Form, ListGroup } from "reactstrap";
+import { Container, Row, Col, Form, ListGroup, Button } from "reactstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import calculateAvgRating from "../utils/avgRating";
 import avatar from "../assets/images/avatar.jpg";
@@ -17,6 +17,8 @@ const TourDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -42,6 +44,10 @@ const TourDetails = () => {
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
+
+      const storedIsAdmin = localStorage.getItem("isAdmin");
+
+      setIsAdmin(storedIsAdmin === 'true');
     };
 
     if (id) {
@@ -81,6 +87,34 @@ const TourDetails = () => {
     }
   };
 
+
+
+  const handleDeleteTour = async () => { // !!! Функция для удаления тура
+    console.log("Deleting tour with ID:", id);
+
+    try {
+
+      await axios.delete(`http://localhost:8085/api/tours/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+
+      console.log("Tour deleted successfully"); // !!!
+
+      navigate('/tours'); // !!!  Перенаправляем на страницу туров после удаления
+    } catch (error) {
+      console.error("Error deleting tour:", error); // !!!
+      if (error.response) {
+
+        console.error("Server responded with:", error.response.data); // !!!
+      }
+    }
+  };
+
+
+
   if (!loading && tour) {
     const { photoUrl, title, description, price, city, distance, maxPeople } = tour;
     const { totalRating, avgRating } = calculateAvgRating(reviews);
@@ -119,6 +153,12 @@ const TourDetails = () => {
                       <h5>Description</h5>
                       <p>{description}</p>
                     </div>
+
+                    {isAdmin && (// !!!  Кнопка "Delete Tour" отображается только для admin
+                        <Button color="danger" onClick={handleDeleteTour}>
+                          Delete Tour
+                        </Button>
+                    )}
 
                     <div className="tour__reviews mt-4">
                       <h4>Reviews ({reviews?.length} reviews)</h4>

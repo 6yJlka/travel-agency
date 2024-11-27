@@ -2,6 +2,8 @@ package com.travel.tour_agency_backend.service;
 
 import com.travel.tour_agency_backend.entity.Tour;
 import com.travel.tour_agency_backend.repository.TourRepository;
+import com.travel.tour_agency_backend.repository.BookingRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class TourService {
         this.tourRepository = tourRepository;
     }
 
+    @Autowired
+    private BookingRepository bookingRepository;
     // Получение всех туров
     public List<Tour> getAllTours() {
         return tourRepository.findAll();
@@ -56,7 +60,9 @@ public class TourService {
     }
 
     // Удаление тура
+    @Transactional
     public void deleteTour(Long id) {
+        bookingRepository.deleteByTourId(id);
         tourRepository.deleteById(id);
     }
 }

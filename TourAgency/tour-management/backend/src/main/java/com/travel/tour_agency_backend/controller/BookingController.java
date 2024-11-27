@@ -62,16 +62,18 @@ public class BookingController {
             if (tokenProvider.validateToken(token)) {
                 Long userId = tokenProvider.getUserIdFromJWT(token);
                 User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
-
+                System.out.println("userId from token: " + userId);
                 booking.setUser(user);
 
                 // !!! Получаем объект Tour по id и устанавливаем его в booking
                 Long tourId = booking.getTour().getId();
+
                 Tour tour = tourRepository.findById(tourId)
                         .orElseThrow(() -> new IllegalArgumentException("Tour not found with ID: " + tourId));
                 booking.setTour(tour);
                 booking.setTotalPrice(tour.getPrice().multiply(BigDecimal.valueOf(booking.getNumPeople())));
                 Booking savedBooking = bookingService.createBooking(booking);
+                System.out.println("Received booking data: " + savedBooking);
                 return ResponseEntity.ok(savedBooking);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
@@ -79,6 +81,7 @@ public class BookingController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create booking: " + e.getMessage());
         }
+
     }
 
     @PutMapping("/{id}")

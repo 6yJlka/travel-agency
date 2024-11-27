@@ -3,7 +3,8 @@ package com.travel.tour_agency_backend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.util.Objects;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +13,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "tours") // Указываем имя таблицы
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString(exclude = "reviews")
 public class Tour {
 
     @Id
