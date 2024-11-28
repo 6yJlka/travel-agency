@@ -26,6 +26,7 @@ const Login = ({ setIsAuthenticated }) => { // Принимаем функцию
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
       localStorage.setItem("isAdmin", response.data.isAdmin);
+      localStorage.setItem("userId", response.data.userId);
       setIsAuthenticated(true);
       navigate("/");
     } catch (error) {

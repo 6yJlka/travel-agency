@@ -64,7 +64,19 @@ public class ReviewService {
     }
 
     // Удаление отзыва
-    public void deleteReview(Long id) {
-        reviewRepository.deleteById(id);
+    @Transactional
+    public void deleteReview(Long reviewId, Long userId, boolean isAdmin) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found with id: " + reviewId));
+
+        // Разрешить удаление, если пользователь - автор отзыва или администратор
+        if (!review.getUser().getId().equals(userId) && !isAdmin) {
+            throw new SecurityException("You are not authorized to delete this review");
+        }
+
+        reviewRepository.deleteById(reviewId);
     }
+
+
+
 }

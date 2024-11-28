@@ -68,6 +68,8 @@ public class UserController {
             response.put("token", token);
             response.put("username", u.getUsername());
             response.put("isAdmin", "admin".equals(user.get().getUsername()));
+            response.put("userId", u.getId()); // Добавляем userId в ответ
+
 
             return ResponseEntity.ok(response); // Возвращаем токен в JSON
         } else {

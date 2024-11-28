@@ -47,9 +47,27 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReview(@PathVariable Long id) {
-        reviewService.deleteReview(id);
+    public ResponseEntity<?> deleteReview(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.substring(7); // "Bearer "
+            if (tokenProvider.validateToken(token)) {
+                Long userId = tokenProvider.getUserIdFromJWT(token);
+                boolean isAdmin = "admin".equals(tokenProvider.getUsernameFromJWT(token));
+
+                // Удаляем отзыв, если это автор или администратор
+                reviewService.deleteReview(id, userId, isAdmin);
+                return ResponseEntity.ok("Review deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete review: " + e.getMessage());
+        }
     }
+
+
 
     @PostMapping
     public ResponseEntity<?> createReview(@RequestHeader("Authorization") String authHeader, @RequestBody Review review) {

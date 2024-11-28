@@ -112,6 +112,25 @@ const TourDetails = () => {
       }
     }
   };
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await axios.delete(`http://localhost:8085/api/reviews/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      // Обновляем список отзывов после удаления
+      setReviews(reviews.filter((review) => review.id !== reviewId));
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      if (error.response) {
+        console.error("Server responded with:", error.response.data);
+      }
+    }
+  };
+
+
 
 
 
@@ -209,14 +228,26 @@ const TourDetails = () => {
                                     <h6>{review.comment}</h6>
                                   </div>
                                   <span className="d-flex align-items-center">
-                                {review.rating}
+                                    {review.rating}
                                     <i className="ri-star-fill"></i>
-                              </span>
+                                  </span>
                                 </div>
+                                {/* Кнопка удаления */}
+                                {(isAdmin || review.user?.id === Number(localStorage.getItem("userId"))) && (
+                                    <button
+                                        className="btn btn-danger mt-2"
+                                        onClick={() => handleDeleteReview(review.id)}
+                                    >
+                                      Delete
+                                    </button>
+                                )}
                               </div>
                             </div>
                         ))}
                       </ListGroup>
+
+
+
                     </div>
                   </div>
                 </Col>
